@@ -7,7 +7,7 @@ using WebStore.Domain;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Services;
 
-namespace WebStore.Infrastructure.Services.InSql
+namespace WebStore.Services.Services.InSql
 {
     public class SqlProductData : IProductData
     {

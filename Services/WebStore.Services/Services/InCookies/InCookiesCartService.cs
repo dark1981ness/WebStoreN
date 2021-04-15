@@ -3,11 +3,11 @@ using WebStore.Domain.Entities;
 using Newtonsoft.Json;
 using System.Linq;
 using WebStore.Domain;
-using WebStore.Infrastructure.Mapping;
 using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Services;
+using WebStore.Services.Mapping;
 
-namespace WebStore.Infrastructure.Services.InCookies
+namespace WebStore.Services.Services.InCookies
 {
     public class InCookiesCartService : ICartServices
     {
