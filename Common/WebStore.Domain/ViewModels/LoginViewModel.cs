@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebStore.ViewModels
+namespace WebStore.Domain.ViewModels
 {
     public class LoginViewModel
     {
@@ -14,10 +14,10 @@ namespace WebStore.ViewModels
         [DataType(DataType.Password)]
         public string Password { get; init; }
 
-        [Display(Name ="Запомнить меня")]
+        [Display(Name = "Запомнить меня")]
         public bool RememberMe { get; init; }
 
-        [HiddenInput(DisplayValue =false)]
+        [HiddenInput(DisplayValue = false)]
         public string ReturnUrl { get; init; }
     }
 }

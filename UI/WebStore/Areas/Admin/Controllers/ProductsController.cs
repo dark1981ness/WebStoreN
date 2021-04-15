@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebStore.Infrastructure.Services.Interfaces;
 using WebStore.Domain.Entities.Identity;
+using WebStore.Interfaces.Services;
 
 namespace WebStore.Areas.Admin.Controllers
 {

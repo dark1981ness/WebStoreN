@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebStore.Domain.Entities.Orders;
-using WebStore.ViewModels;
+using WebStore.Domain.ViewModels;
 
-namespace WebStore.Infrastructure.Services.Interfaces
+namespace WebStore.Interfaces.Services
 {
     public interface IOrderService
     {

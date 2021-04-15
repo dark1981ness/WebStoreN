@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebStore.Infrastructure.Services.Interfaces;
-using WebStore.Models;
-using WebStore.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using WebStore.Domain.Entities.Identity;
+using WebStore.Domain.Models;
+using WebStore.Domain.ViewModels;
+using WebStore.Interfaces.Services;
 
 namespace WebStore.Controllers
 {
