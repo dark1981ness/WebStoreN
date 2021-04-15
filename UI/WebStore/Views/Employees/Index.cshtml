@@ -1,0 +1,55 @@
+﻿@model IEnumerable<WebStore.Models.Employee>
+@using WebStore.Domain.Entities.Identity
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+
+    <h3>Сотрудники</h3>
+
+    <hr />
+    <a asp-controller="Employees" asp-action="Create" class="btn btn-success">Создать</a>
+    <hr />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th>Карточка</th>
+
+                @if (User.IsInRole(Role._administrators))
+                {
+                    <th></th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in Model)
+            {
+            <tr>
+                <td>@employee.LastName</td>
+                <td>@employee.FirstName</td>
+                <td>@employee.Patronymic</td>
+                <td><a asp-controller="Employees" asp-action="Details" asp-route-id="@employee.Id" class="btn btn-default">Детали</a></td>
+                @if (User.IsInRole(Role._administrators))
+                {
+                    <td>
+                        <a asp-controller="Employees" asp-action="Edit" asp-route-id="@employee.Id" class="btn btn-info col-sm-2"><i class="fas fa-user-edit"></i></a>
+                        <a asp-controller="Employees" asp-action="Delete" asp-route-id="@employee.Id" class="btn btn-danger col-sm-2"><i class="fas fa-user-minus"></i></a>
+                    </td>
+                }
+
+            </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default">Домой</a>
+    </p>
+
+</div>
