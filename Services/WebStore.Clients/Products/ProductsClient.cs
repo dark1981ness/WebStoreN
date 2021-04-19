@@ -18,6 +18,8 @@ namespace WebStore.Clients.Products
 
         public ProductsClient(IConfiguration configuration) :base(configuration,WebAPI.Products) { }
 
+        public BrandDTO GetBrandById(int id) => Get<BrandDTO>($"{Address}/brands/{id}");
+
         public IEnumerable<BrandDTO> GetBrands()=> Get<IEnumerable<BrandDTO>>($"{Address}/brands");
 
         public ProductDTO GetProductById(int id) => Get<ProductDTO>($"{Address}/{id}");
@@ -27,6 +29,9 @@ namespace WebStore.Clients.Products
             .Content
             .ReadAsAsync<IEnumerable<ProductDTO>>()
             .Result;
+
+        public SectionDTO GetSectionById(int id) => Get<SectionDTO>($"{Address}/sections/{id}");
+       
 
         public IEnumerable<SectionDTO> GetSections() => Get<IEnumerable<SectionDTO>>($"{Address}/sections");
         

@@ -19,6 +19,9 @@ namespace WebStore.ServiceHosting.Controllers
 
         public ProductsApiController(IProductData productData) => _productData = productData;
 
+        [HttpGet("brands/{id}")]
+        public BrandDTO GetBrandById(int id) => _productData.GetBrandById(id);
+
         [HttpGet("brands")]
         public IEnumerable<BrandDTO> GetBrands() => _productData.GetBrands();
 
@@ -27,6 +30,9 @@ namespace WebStore.ServiceHosting.Controllers
 
         [HttpPost]
         public IEnumerable<ProductDTO> GetProducts(ProductFilter productFilter = null) => _productData.GetProducts(productFilter);
+
+        [HttpGet("sections/{id}")]
+        public SectionDTO GetSectionById(int id) => _productData.GetSectionById(id);
 
         [HttpGet("sections")]
         public IEnumerable<SectionDTO> GetSections() => _productData.GetSections();
