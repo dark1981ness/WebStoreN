@@ -42,5 +42,7 @@ namespace WebStore.Domain.Models
 
             return age;
         }
+
+        public override string ToString() => $"{LastName} {FirstName} {Patronymic} {Age}";
     }
 }
