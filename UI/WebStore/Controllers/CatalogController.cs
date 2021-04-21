@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using WebStore.Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain;
-using WebStore.ViewModels;
-using WebStore.Infrastructure.Mapping;
+using WebStore.Domain.ViewModels;
+using WebStore.Interfaces.Services;
+using WebStore.Services.Mapping;
 
 namespace WebStore.Controllers
 {

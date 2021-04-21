@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using WebStore.Domain.Entities.Identity;
-using WebStore.ViewModels;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using WebStore.Domain.ViewModels;
 
 namespace WebStore.Controllers
 {
