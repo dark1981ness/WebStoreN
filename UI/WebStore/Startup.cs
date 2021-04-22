@@ -28,15 +28,7 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<WebStoreDB>(opt =>
-                opt.UseSqlServer(Configuration.GetConnectionString("Default"))
-                    //.EnableSensitiveDataLogging(true)
-                    //.LogTo(Console.WriteLine)
-                    );
-            services.AddTransient<WebStoreDbInitializer>();
-
             services.AddIdentity<User, Role>()
-                //.AddEntityFrameworkStores<WebStoreDB>()
                 .AddDefaultTokenProviders();
 
             #region Identity stores custom implementations
@@ -84,13 +76,9 @@ namespace WebStore
                 opt.SlidingExpiration = true;
             });
 
-            //services.AddTransient<IEmployeesData, InMemoryEmployeesData>();
-            //services.AddTransient<IProductData, InMemoryProductData>();
             services.AddTransient<IEmployeesData, EmployeesClient>();
-            //services.AddScoped<IProductData, SqlProductData>();
             services.AddScoped<IProductData, ProductsClient>();
             services.AddScoped<ICartServices, InCookiesCartService>();
-            //services.AddScoped<IOrderService, SqlOrderService>();
             services.AddScoped<IOrderService, OrdersClient>();
             services.AddScoped<IValuesService, ValuesClient>();
 
@@ -103,9 +91,8 @@ namespace WebStore
                 .AddRazorRuntimeCompilation();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, WebStoreDbInitializer dbInitializer)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            dbInitializer.Initialize();
 
             if (env.IsDevelopment())
             {
