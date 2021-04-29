@@ -18,7 +18,7 @@ using WebStore.Interfaces.Services;
 using WebStore.Interfaces.TestAPI;
 using WebStore.Services.Services.InCookies;
 using WebStore.Logger;
-
+using WebStore.Infrastructure.Middleware;
 
 namespace WebStore
 {
@@ -107,6 +107,8 @@ namespace WebStore
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
