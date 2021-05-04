@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebStore.DAL.Context;
+using WebStore.Domain.DTO;
 using WebStore.Domain.Entities.Identity;
 using WebStore.Domain.Entities.Orders;
-using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Services;
+using WebStore.Services.Mapping;
 
 namespace WebStore.Services.Services.InSql
 {
@@ -23,7 +24,7 @@ namespace WebStore.Services.Services.InSql
             _userManager = userManager;
         }
 
-        public async Task<Order> CreateOrder(string userName, CartViewModel cartViewModel, OrderViewModel orderViewModel)
+        public async Task<OrderDTO> CreateOrder(string userName, CreateOrderModel orderModel)
         {
             var user = await _userManager.FindByNameAsync(userName);
             if (user is null)
@@ -33,29 +34,46 @@ namespace WebStore.Services.Services.InSql
 
             var order = new Order
             {
-                Name = orderViewModel.Name,
-                Address = orderViewModel.Address,
-                Phone = orderViewModel.Phone,
+                Name = orderModel.Order.Name,
+                Address = orderModel.Order.Address,
+                Phone = orderModel.Order.Phone,
                 User = user
             };
 
-            var product_ids = cartViewModel.Items.Select(item => item.product.Id).ToArray();
+            //var product_ids = cartViewModel.Items.Select(item => item.product.Id).ToArray();
 
-            var cart_products = await _db.Products
-                .Where(p => product_ids.Contains(p.Id))
-                .ToArrayAsync();
+            //var cart_products = await _db.Products
+            //    .Where(p => product_ids.Contains(p.Id))
+            //    .ToArrayAsync();
 
-            order.Items = cartViewModel.Items.Join(
-                cart_products,
-                cart_item => cart_item.product.Id,
-                product => product.Id,
-                (cart_item, product) => new OrderItem
+            //order.Items = cartViewModel.Items.Join(
+            //    cart_products,
+            //    cart_item => cart_item.product.Id,
+            //    product => product.Id,
+            //    (cart_item, product) => new OrderItem
+            //    {
+            //        Order = order,
+            //        Product = product,
+            //        Price = product.Price,
+            //        Quantity = cart_item.quantity
+            //    }).ToArray();
+
+            foreach (var item in orderModel.Items)
+            {
+                var product = await _db.Products.FindAsync(item.Id);
+
+                if (product is null) continue;
+
+                var order_item = new OrderItem
                 {
                     Order = order,
-                    Product = product,
                     Price = product.Price,
-                    Quantity = cart_item.quantity
-                }).ToArray();
+                    Quantity = item.Quantity,
+                    Product = product
+                };
+
+                order.Items.Add(order_item);
+            }
 
             await _db.Orders.AddAsync(order);
 
@@ -63,18 +81,20 @@ namespace WebStore.Services.Services.InSql
 
             await transaction.CommitAsync();
 
-            return order;
+            return order.ToDTO();
         }
 
-        public async Task<Order> GetOrderById(int id) => await _db.Orders
+        public async Task<OrderDTO> GetOrderById(int id) => (await _db.Orders
             .Include(order => order.User)
             .Include(order => order.Items)
-            .FirstOrDefaultAsync(order => order.Id == id);
+            .FirstOrDefaultAsync(order => order.Id == id))
+            .ToDTO();
 
-        public async Task<IEnumerable<Order>> GetUserOrder(string userName) => await _db.Orders
+        public async Task<IEnumerable<OrderDTO>> GetUserOrder(string userName) => (await _db.Orders
             .Include(order => order.User)
             .Include(order => order.Items)
             .Where(order => order.User.UserName == userName)
-            .ToArrayAsync();
+            .ToArrayAsync())
+            .Select(order=>order.ToDTO());
     }
 }

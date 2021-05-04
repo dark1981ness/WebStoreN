@@ -5,13 +5,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using WebStore.Clients.Base;
+using WebStore.Interfaces;
 using WebStore.Interfaces.TestAPI;
 
 namespace WebStore.Clients.Values
 {
     public class ValuesClient : BaseClient, IValuesService
     {
-        public ValuesClient(IConfiguration configuration) : base(configuration, "api/values") { }
+        public ValuesClient(IConfiguration configuration) : base(configuration, WebAPI.TestWebAPI) { }
 
         public Uri Create(string value)
         {
