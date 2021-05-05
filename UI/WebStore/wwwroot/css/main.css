@@ -901,7 +901,7 @@ h2.title {
     transition: height 500ms ease 0s;
     width: 100%;
     display: block;
-    opacity:0.6;
+    opacity: 0.6;
 }
 
 .single-products:hover .product-overlay {
@@ -2516,4 +2516,8 @@ h2.title {
 
 .contact-info .social-networks ul li a:hover {
     color: #FE980F;
+}
+
+.panel-body ul li.active {
+    text-decoration: underline;
 }
