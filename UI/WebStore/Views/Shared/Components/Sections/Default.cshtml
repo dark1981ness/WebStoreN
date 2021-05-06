@@ -1,4 +1,8 @@
 ﻿@model WebStore.ViewModels.SelectableSectionsViewModel
+@{ 
+    var section_id = ViewBag.SectionId;
+    var parent_section_id = ViewData["ParentSectionId"];
+}
 
 <h2>Категории</h2>
 <div class="panel-group category-products" id="accordian">
