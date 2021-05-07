@@ -74,7 +74,7 @@ namespace WebStore.Services.Tests.Services
                         Section = new SectionDTO{Id = 3, Name = "Section 3", Order = 3 }
                     },
 
-                }), 3);
+                }, 3));
             _cartStoreMock = new Mock<ICartStore>();
             _cartStoreMock.Setup(c => c.Cart).Returns(_cart);
 
