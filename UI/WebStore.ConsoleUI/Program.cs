@@ -14,7 +14,7 @@ namespace WebStore.ConsoleUI
 
             var products_client = new ProductsClient(configuration);
 
-            foreach (var product in products_client.GetProducts())
+            foreach (var product in products_client.GetProducts().Products)
             {
                 Console.WriteLine($"{product.Name} - {product.Price}");
             }
