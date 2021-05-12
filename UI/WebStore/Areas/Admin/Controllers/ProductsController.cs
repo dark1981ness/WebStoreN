@@ -13,7 +13,7 @@ namespace WebStore.Areas.Admin.Controllers
 
         public ProductsController(IProductData productData) => _productData = productData;
 
-        public IActionResult Index() => View(_productData.GetProducts().FromDTO());
+        public IActionResult Index() => View(_productData.GetProducts().Products.FromDTO());
 
         public IActionResult Edit(int id) => _productData.GetProductById(id) is { } product
             ? View(product.FromDTO())

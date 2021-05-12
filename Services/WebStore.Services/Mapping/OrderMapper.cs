@@ -12,7 +12,7 @@ namespace WebStore.Services.Mapping
             : new OrderItemDTO
             {
                 Id=item.Id,
-                ProductId = item.Id,
+                ProductId = item.Product?.Id ?? 0,
                 Price =item.Price,
                 Quantity=item.Quantity,
             };

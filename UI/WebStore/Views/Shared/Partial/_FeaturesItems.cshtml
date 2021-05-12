@@ -35,6 +35,7 @@
                                    asp-route-BrandId="@Context.Request.Query["BrandId"]">@product.Name</a>
                             </p>
                             <a asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id"
+                               data-id="@product.Id"
                                class="btn btn-default add-to-cart">
                                 <i class="fa fa-shopping-cart"></i>В корзину
                             </a>
@@ -50,11 +51,4 @@
             </div>
         </div>
     }
-
-    <ul class="pagination">
-        <li class="active"><a href="">1</a></li>
-        <li><a href="">2</a></li>
-        <li><a href="">3</a></li>
-        <li><a href="">&raquo;</a></li>
-    </ul>
 </div><!--features_items-->

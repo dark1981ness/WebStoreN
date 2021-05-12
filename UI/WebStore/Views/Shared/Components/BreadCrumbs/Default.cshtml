@@ -11,7 +11,7 @@
             {
                 <li class="active">
                     <a asp-controller="Catalog" asp-action="Index" asp-route-SectionId="@Model.Section.Parent.Id">
-                        @Model.Section.Parent
+                        @Model.Section.Parent.Name
                     </a>
                 </li>
             }
@@ -23,10 +23,10 @@
             </li>
         }
 
-        @if (Model.Section != null)
+        @if (Model.Brand != null)
         {
             <li class="active">
-                <a asp-controller="Catalog" asp-action="Index" asp-route-SectionId="@Model.Brand.Id">
+                <a asp-controller="Catalog" asp-action="Index" asp-route-BrandId="@Model.Brand.Id">
                     @Model.Brand.Name
                 </a>
             </li>

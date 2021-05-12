@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using WebStore.Domain;
 using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Services;
@@ -11,26 +12,43 @@ namespace WebStore.Controllers
     public class CatalogController : Controller
     {
         private readonly IProductData _productData;
+        private readonly IConfiguration _configuration;
 
-        public CatalogController(IProductData productData) => _productData = productData;
-
-        public IActionResult Index(int? BrandId, int? SectionId)
+        public CatalogController(IProductData productData, IConfiguration configuration)
         {
+            _productData = productData;
+            _configuration = configuration;
+        }
+
+        public IActionResult Index(int? brandId, int? sectionId, int page = 1, int? pageSize = null)
+        {
+            var page_size = pageSize
+                ?? (int.TryParse(_configuration["CatalogPageSize"], out var value) ? value : null);
+
             var filters = new ProductFilter
             {
-                BrandId = BrandId,
-                SectionId = SectionId
+                BrandId = brandId,
+                SectionId = sectionId,
+                Page = page,
+                PageSize = page_size
             };
 
-            var products = _productData.GetProducts(filters);
+            var (products, total_count) = _productData.GetProducts(filters);
+
             return View(new CatalogViewModel
             {
-                SectionId = SectionId,
-                BrandId = BrandId,
+                SectionId = sectionId,
+                BrandId = brandId,
                 Products = products
                 .OrderBy(p => p.Order)
                 .FromDTO()
-                .ToView()
+                .ToView(),
+                PageViewModel = new PageViewModel
+                {
+                    Page = page,
+                    PageSize = page_size ?? 0,
+                    TotalItems = total_count
+                }
             });
         }
 
