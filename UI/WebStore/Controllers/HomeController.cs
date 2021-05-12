@@ -34,6 +34,12 @@ namespace WebStore.Controllers
         public IActionResult Shop() => View();
 
         public IActionResult Checkout() => View();
+
+        public IActionResult ErrorStatus(string code) => code switch
+        {
+            "404" => RedirectToAction(nameof(PageNotFound)),
+            _ => Content($"Error code: {code}")
+        };
         
     }
 }
