@@ -13,6 +13,8 @@ namespace WebStore.Domain.DTO
         public string Name { get; set; }
 
         public int Order { get; set; }
+
+        public int ProductsCount { get; set; }
     }
 
     public class SectionDTO

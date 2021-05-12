@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WebStore.Interfaces.Services;
 using WebStore.Domain.ViewModels;
+using WebStore.ViewModels;
 
 namespace WebStore.Components
 {
@@ -13,8 +14,27 @@ namespace WebStore.Components
 
         public SectionsViewComponent(IProductData productData) => _productData = productData;
 
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(string sectionId)
         {
+            var section_id = int.TryParse(sectionId, out var id) ? id : (int?)null;
+
+            var sections = GetSections(section_id, out var parent_section_id);
+
+            ViewBag.SectionId = section_id;
+            ViewData["ParentSectionId"] = parent_section_id;
+
+            return View(new SelectableSectionsViewModel()
+            {
+                Sections = sections,
+                SectionId = section_id,
+                ParentSectionId = parent_section_id
+            });
+        }
+
+        private IEnumerable<SectionViewModel> GetSections(int? sectionId, out int? parentSectionId)
+        {
+            parentSectionId = null;
+
             var sections = _productData.GetSections();
 
             var parent_sections = sections.Where(s => s.ParentId is null);
@@ -32,6 +52,9 @@ namespace WebStore.Components
                 var child = sections.Where(s => s.ParentId == parent_section.Id);
                 foreach (var child_section in child)
                 {
+                    if (child_section.Id == sectionId)
+                        parentSectionId = child_section.ParentId;
+
                     parent_section.ChildSections.Add(new SectionViewModel
                     {
                         Id = child_section.Id,
@@ -45,7 +68,7 @@ namespace WebStore.Components
 
             parent_sections_views.Sort((a, b) => Comparer<int>.Default.Compare(a.Order, b.Order));
 
-            return View(parent_sections_views);
+            return parent_sections_views;
         }
     }
 }
