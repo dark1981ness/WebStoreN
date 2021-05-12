@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using WebStore.DAL.Context;
@@ -17,11 +19,13 @@ namespace WebStore.Services.Services.InSql
     {
         private readonly WebStoreDB _db;
         private readonly UserManager<User> _userManager;
+        private readonly ILogger<SqlOrderService> _logger;
 
-        public SqlOrderService(WebStoreDB db, UserManager<User> userManager)
+        public SqlOrderService(WebStoreDB db, UserManager<User> userManager, ILogger<SqlOrderService> logger)
         {
             _db = db;
             _userManager = userManager;
+            _logger = logger;
         }
 
         public async Task<OrderDTO> CreateOrder(string userName, CreateOrderModel orderModel)
@@ -29,6 +33,10 @@ namespace WebStore.Services.Services.InSql
             var user = await _userManager.FindByNameAsync(userName);
             if (user is null)
                 throw new InvalidOperationException($"Пользователь с именем {userName} в БД отсутствует");
+
+            _logger.LogInformation($"Оформление нового заказа для {userName}");
+
+            var timer = Stopwatch.StartNew();
 
             await using var transaction = await _db.Database.BeginTransactionAsync();
 
@@ -80,6 +88,8 @@ namespace WebStore.Services.Services.InSql
             await _db.SaveChangesAsync();
 
             await transaction.CommitAsync();
+
+            _logger.LogInformation($"Заказ для {userName} успешно сформирован за {timer.Elapsed} с id:{order.Id} на сумму {order.Items.Sum(i=>i.TotalItemPrice)}");
 
             return order.ToDTO();
         }

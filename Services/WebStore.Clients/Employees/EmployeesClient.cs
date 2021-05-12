@@ -27,9 +27,12 @@ namespace WebStore.Clients.Employees
         public bool Delete(int id)
         {
             _logger.LogInformation($"Удаление сотрудника id:{id}");
-            var result = Delete($"{Address}/{id}").IsSuccessStatusCode;
-            _logger.LogInformation($"Удаление сотрудника id:{id} - {(result ? "выполнено" : "не найден")} выполнено");
-            return result;
+            using (_logger.BeginScope($"Удаление сотрудника id:{id}"))
+            {
+                var result = Delete($"{Address}/{id}").IsSuccessStatusCode;
+                _logger.LogInformation($"Удаление сотрудника id:{id} - {(result ? "выполнено" : "не найден")} выполнено");
+                return result; 
+            }
         }
 
         public IEnumerable<Employee> Get() => Get<IEnumerable<Employee>>(Address);

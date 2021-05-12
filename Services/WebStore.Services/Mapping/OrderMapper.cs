@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using WebStore.Domain.DTO;
+using WebStore.Domain.Entities;
 using WebStore.Domain.Entities.Orders;
 
 namespace WebStore.Services.Mapping
@@ -15,7 +12,8 @@ namespace WebStore.Services.Mapping
             : new OrderItemDTO
             {
                 Id=item.Id,
-                Price=item.Price,
+                ProductId = item.Id,
+                Price =item.Price,
                 Quantity=item.Quantity,
             };
 
@@ -24,6 +22,7 @@ namespace WebStore.Services.Mapping
             : new OrderItem
             {
                 Id = item.Id,
+                Product = new Product { Id = item.ProductId },
                 Price = item.Price,
                 Quantity = item.Quantity,
             };
