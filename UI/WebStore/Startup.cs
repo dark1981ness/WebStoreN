@@ -20,6 +20,7 @@ using WebStore.Services.Services.InCookies;
 using WebStore.Logger;
 using WebStore.Infrastructure.Middleware;
 using WebStore.Services.Services;
+using WebStore.Hubs;
 
 namespace WebStore
 {
@@ -93,6 +94,8 @@ namespace WebStore
                         mvc.Conventions.Add(new ApplicationConvention());
                     })
                 .AddRazorRuntimeCompilation();
+
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory logger)
@@ -115,6 +118,8 @@ namespace WebStore
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ChatHub>("/chat");
+
                 endpoints.MapGet("/Greetings", async context =>
                 {
                     await context.Response.WriteAsync(Configuration["Greetings"]);
