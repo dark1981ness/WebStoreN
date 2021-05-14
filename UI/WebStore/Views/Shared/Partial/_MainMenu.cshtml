@@ -30,6 +30,8 @@
             <li><a is-active-route asp-controller="AjaxTest" asp-action="SignalRTest">SignalR</a></li>
         </ul>
     </li>
+    <li><a data-ajax="true" data-ajax-url="@Url.Action("Clear", "Console")" href="#">Clear</a></li>
+    <li><a data-ajax="true" data-ajax-url="@Url.Action("WriteLine", "Console", new { Message = "Hello World!" })" href="#">WL</a></li>
 </ul>
 
 @functions
