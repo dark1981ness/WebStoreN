@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ namespace WebStore.Controllers
     {
         private readonly IProductData _productData;
         private readonly IConfiguration _configuration;
+        private const string _catalogPageSize = "CatalogPageSize";
 
         public CatalogController(IProductData productData, IConfiguration configuration)
         {
@@ -23,7 +25,7 @@ namespace WebStore.Controllers
         public IActionResult Index(int? brandId, int? sectionId, int page = 1, int? pageSize = null)
         {
             var page_size = pageSize
-                ?? (int.TryParse(_configuration["CatalogPageSize"], out var value) ? value : null);
+                ?? (int.TryParse(_configuration[_catalogPageSize], out var value) ? value : null);
 
             var filters = new ProductFilter
             {
@@ -63,5 +65,24 @@ namespace WebStore.Controllers
 
             return View(product.FromDTO().ToView());
         }
+
+        #region WebAPI
+
+        public IActionResult GetFeaturesItems(int? brandId, int? sectionId, int page = 1, int? pageSize = null) =>
+            PartialView("Partial/_FeaturesItems", GetProducts(brandId, sectionId, page, pageSize));
+
+        private IEnumerable<ProductViewModel> GetProducts(int? brandId, int? sectionId, int page, int? pageSize) =>
+            _productData.GetProducts(new ProductFilter
+            {
+                SectionId = sectionId,
+                BrandId = brandId,
+                Page = page,
+                PageSize = pageSize ?? (int.TryParse(_configuration[_catalogPageSize], out var size) ? size : null)
+            })
+               .Products.OrderBy(p => p.Order)
+               .FromDTO()
+               .ToView();
+
+        #endregion
     }
 }
